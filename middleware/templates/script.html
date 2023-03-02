@@ -1,0 +1,145 @@
+<script>
+    Highcharts.getJSON(
+        'latency/{{ experiment.id }}',
+        function (data) {
+            Highcharts.chart('exp{{ experiment.id }}', {
+                chart: {
+                    zoomType: 'x'
+                },
+                title: {
+                    text: '{{ experiment.name }}'
+                },
+                subtitle: {
+                    text: (document.ontouchstart === undefined ?
+                            'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in')
+                        + '<br> <span class="text-danger">Avg-Latency:' + data['avg_delay'] + " sec</span>"
+                        + '<br> <span class="text-info">Avg-Mes-CPU:' + data['avg_measured_cpu'] + " %</span>"
+                        + '<br> <span class="text-success">Avg-Pred-CPU:' + data['avg_pred_cpu'] + " %</span>"
+                },
+                xAxis: {
+                    type: 'datetime',
+                    gridLineWidth: 1,
+                },
+                yAxis: [
+                    { // Primary yAxis
+                        title: {
+                            text: 'Call Latency',
+                            style: {
+                                color: Highcharts.getOptions().colors[0]
+                            }
+                        },
+                        opposite: false
+                    },
+                    {
+                        title: {
+                            text: 'CPU Measured',
+                        },
+                        opposite: true
+                    },
+                    {
+                        title: {
+                            text: 'CPU Prediction',
+                            style: {
+                                color: Highcharts.getOptions().colors[2]
+                            }
+                        },
+                        opposite: true
+                    },
+                    {
+                        title: {
+                            text: 'Ping ',
+                            style: {
+                                color: Highcharts.getOptions().colors[3]
+                            }
+                        },
+                        opposite: true
+                    }
+                    ],
+                legend: {
+                    enabled: true
+                },
+                plotOptions: {
+                    area: {
+                        fillColor: {
+                            linearGradient: {
+                                x1: 0,
+                                y1: 0,
+                                x2: 0,
+                                y2: 1
+                            },
+                            stops: [
+                                [0, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')],
+                                [1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                            ]
+                        },
+                        marker: {
+                            radius: 2
+                        },
+                        lineWidth: 1,
+                        states: {
+                            hover: {
+                                lineWidth: 1
+                            }
+                        },
+                        threshold: null
+                    }
+                },
+
+                series: [
+                    {
+                        type: 'area',
+                        name: 'Call Latency',
+                        yAxis: 0,
+                        data: data['latency']
+                    },
+                    {
+                        type: 'area',
+                        name: 'CPU Measured',
+                        yAxis: 2,
+                        data: data['mes_cpu']
+                    },
+                    {
+                        type: 'area',
+                        name: 'CPU Prediction',
+                        yAxis: 2,
+                        data: data['pred_cpu']
+                    },
+                    {
+                        type: 'area',
+                        name: 'CPU Frankfurt',
+                        yAxis: 2,
+                        data: data['fra_cpu']
+                    }, {
+                        type: 'area',
+                        name: 'CPU Ireland',
+                        yAxis: 2,
+                        data: data['ire_cpu']
+                    }, {
+                        type: 'area',
+                        name: 'Predicted CPU Frankfurt',
+                        yAxis: 2,
+                        data: data['pred_fra_cpu']
+                    }, {
+                        type: 'area',
+                        name: 'Predicted CPU Ireland',
+                        yAxis: 2,
+                        data: data['pred_ira_cpu']
+                    },
+                    {
+                        type: 'area',
+                        name: 'Ping Frankfurt',
+                        yAxis: 3,
+                        data: data['fra_ping']
+                    },
+                    {
+                        type: 'area',
+                        name: 'Ping Ireland',
+                        yAxis: 3,
+                        data: data['ire_ping']
+                    }
+
+                    ]
+            });
+        }
+    );
+</script>

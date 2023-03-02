@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    {% for experiment in experiments %}
+        <div class="row mb-5">
+            <div class="col ">
+                <div class="card">
+                    <div class="card-header">
+                        {{ experiment.name }} | exp={{ experiment.id }}, thread={{ experiment.thread_count }} , n={{ experiment.n_value }}, nodes={{ experiment.n_nodes }}, filter={{ experiment.filter_enabled }}, dataset={{experiment.requestlog_set.count}}
+                    </div>
+                    <div class="card-body">
+                        <div id="exp{{ experiment.id }}"></div>
+                        <p class="card-text">{{ experiment.description }}</p>
+                    </div>
+                </div>
+            </div>
+            {% include "script.html" with experiment=experiment %}
+        </div>
+    {% endfor %}
+{% endblock %}

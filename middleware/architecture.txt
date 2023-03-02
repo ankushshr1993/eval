@@ -1,0 +1,23 @@
+@startuml
+
+
+cloud {
+  package "Serverless"{
+    [functions]
+  }
+  package "Data Collection" {
+    [Collectd]
+   }
+}
+
+package "Broker Component" {
+  MQTT --> [Mosquitto]
+  [Collectd] --> MQTT
+}
+
+package "Service Component" {
+    [Mosquitto] --> [Django Service]
+    HTTP ..> [Django Service]
+}
+
+@enduml
